@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026 World Cup Simulator & Tracker</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Simulate and track the 2026 FIFA World Cup. Interactive match simulation, real-time standings, host city guides, squad stats, and golden boot leaderboards.">
+  <meta name="keywords" content="World Cup 2026, World Cup Simulator, Soccer, Football, Match Simulation, USA Canada Mexico, Tournament Tracker">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles.css">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="logo-container">
+        <i class="fa-solid fa-trophy logo-trophy"></i>
+        <span class="logo-text">WC 2026</span>
+      </div>
+      
+      <nav>
+        <ul class="nav-menu">
+          <li class="nav-item active" data-tab="overview">
+            <a href="#overview">
+              <i class="fa-solid fa-chart-line"></i>
+              <span>Dashboard Overview</span>
+            </a>
+          </li>
+          <li class="nav-item" data-tab="fixtures">
+            <a href="#fixtures">
+              <i class="fa-solid fa-calendar-days"></i>
+              <span>Fixtures & Schedule</span>
+            </a>
+          </li>
+          <li class="nav-item" data-tab="squads">
+            <a href="#squads">
+              <i class="fa-solid fa-users"></i>
+              <span>Squad Statistics</span>
+            </a>
+          </li>
+          <li class="nav-item" data-tab="leaders">
+            <a href="#leaders">
+              <i class="fa-solid fa-award"></i>
+              <span>Tournament Leaders</span>
+            </a>
+          </li>
+          <li class="nav-item" data-tab="venues">
+            <a href="#venues">
+              <i class="fa-solid fa-map-location-dot"></i>
+              <span>Host Venues</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <p>Current Simulation Date</p>
+        <p class="gold-date" id="current-sim-date">June 11, 2026</p>
+      </div>
+    </aside>
+
+    <!-- Main Content Window -->
+    <main class="main-content">
+      
+      <!-- Top Bar -->
+      <header class="top-bar">
+        <div class="search-container">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" class="search-input" id="global-player-search" placeholder="Search players (e.g., Pulisic, Davies)...">
+        </div>
+        
+        <div class="top-bar-controls">
+          <select class="phase-selector" id="tournament-phase-select">
+            <option value="all">All Tournament Phases</option>
+            <option value="group" selected>Group Stage</option>
+            <option value="r32">Round of 32</option>
+            <option value="r16">Round of 16</option>
+            <option value="qf">Quarter-finals</option>
+            <option value="sf">Semi-finals</option>
+            <option value="final">Third Place & Final</option>
+          </select>
+          
+          <button class="simulate-btn" id="simulate-next-btn">
+            <i class="fa-solid fa-play"></i>
+            <span>Simulate Next Match</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Hero Banner -->
+      <section class="hero-banner">
+        <div class="hero-text">
+          <h1>2026 FIFA World Cup <span>Simulator</span></h1>
+          <p>Experience the ultimate simulation of the first 48-team World Cup. Follow the matches, track group movements, view squad rosters, check the live leaders, and explore the 16 host cities across Canada, Mexico, and the United States.</p>
+        </div>
+        <img src="world_cup_trophy.png" alt="World Cup Trophy" class="hero-trophy-img" id="hero-trophy-display">
+      </section>
+
+      <!-- Hero Stats Grid -->
+      <section class="stats-grid">
+        <div class="stat-card" id="card-matches-played">
+          <div class="stat-info">
+            <span class="stat-title">Matches Played</span>
+            <span class="stat-value" id="stat-matches">0 / 104</span>
+          </div>
+          <div class="stat-icon">
+            <i class="fa-solid fa-circle-play"></i>
+          </div>
+        </div>
+        
+        <div class="stat-card" id="card-goals-scored">
+          <div class="stat-info">
+            <span class="stat-title">Goals Scored</span>
+            <span class="stat-value" id="stat-goals">0</span>
+          </div>
+          <div class="stat-icon">
+            <i class="fa-solid fa-soccer-ball"></i>
+          </div>
+        </div>
+        
+        <div class="stat-card" id="card-avg-goals">
+          <div class="stat-info">
+            <span class="stat-title">Avg Goals / Match</span>
+            <span class="stat-value" id="stat-avg-goals-val">0.00</span>
+          </div>
+          <div class="stat-icon">
+            <i class="fa-solid fa-calculator"></i>
+          </div>
+        </div>
+        
+        <div class="stat-card" id="card-yellow-red-cards">
+          <div class="stat-info">
+            <span class="stat-title">Yellow / Red Cards</span>
+            <span class="stat-value" id="stat-cards-val">0 / 0</span>
+          </div>
+          <div class="stat-icon">
+            <i class="fa-solid fa-copy"></i>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SECTION: OVERVIEW ================= -->
+      <section class="dashboard-section active" id="section-overview">
+        
+        <!-- Host Nations Overview Cards -->
+        <div class="host-overview-container">
+          <h2 class="host-section-title">
+            <i class="fa-solid fa-earth-americas"></i>
+            Tournament Hosts Overview
+          </h2>
+          <div class="host-cards-grid">
+            
+            <!-- USA Host Card -->
+            <div class="host-card usa" id="host-card-usa" style="cursor: pointer;">
+              <div class="host-header">
+                <span class="host-name">United States</span>
+                <span class="host-flag">🇺🇸</span>
+              </div>
+              <div class="host-stats-small">
+                <div class="host-stat-item">
+                  <span class="host-stat-lbl">Venues</span>
+                  <span class="host-stat-val">11 Cities</span>
+                </div>
+                <div class="host-stat-item">
+                  <span class="host-stat-lbl">Team Rank</span>
+                  <span class="host-stat-val">#15 (FIFA)</span>
+                </div>
+                <div class="host-stat-item">
+                  <span class="host-stat-lbl">Best Result</span>
+                  <span class="host-stat-val">3rd (1930)</span>
+                </div>
+              </div>
+              <p class="host-banner-msg">Click to explore USA Venues</p>
+            </div>
+
+            <!-- Canada Host Card -->
+            <div class="host-card canada" id="host-card-canada" style="cursor: pointer;">
+              <div class="host-header">
+                <span class="host-name">Canada</span>
+                <span class="host-flag">🇨🇦</span>
+              </div>
+              <div class="host-stats-small">
+                <div class="host-stat-item">
+                  <span class="host-stat-lbl">Venues</span>
+                  <span class="host-stat-val">2 Cities</span>
+                </div>
+                <div class="host-stat-item">
+                  <span class="host-stat-lbl">Team Rank</span>
+                  <span class="host-stat-val">#40 (FIFA)</span>
+                </div>
+                <div class="host-stat-item">
+                  <span class="host-stat-lbl">Best Result</span>
+                  <span class="host-stat-val">Group Stage</span>
+                </div>
+              </div>
+              <p class="host-banner-msg">Click to explore Canada Venues</p>
+            </div>
+
+            <!-- Mexico Host Card -->
+            <div class="host-card mexico" id="host-card-mexico" style="cursor: pointer;">
+              <div class="host-header">
+                <span class="host-name">Mexico</span>
+                <span class="host-flag">🇲🇽</span>
+              </div>
+              <div class="host-stats-small">
+                <div class="host-stat-item">
+                  <span class="host-stat-lbl">Venues</span>
+                  <span class="host-stat-val">3 Cities</span>
+                </div>
+                <div class="host-stat-item">
+                  <span class="host-stat-lbl">Team Rank</span>
+                  <span class="host-stat-val">#16 (FIFA)</span>
+                </div>
+                <div class="host-stat-item">
+                  <span class="host-stat-lbl">Best Result</span>
+                  <span class="host-stat-val">QF (1970, 1986)</span>
+                </div>
+              </div>
+              <p class="host-banner-msg">Click to explore Mexico Venues</p>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="overview-main-grid">
+          <!-- Left: Group Standings -->
+          <div class="groups-container">
+            <div class="groups-section-header">
+              <h2 class="host-section-title">
+                <i class="fa-solid fa-list-ol"></i>
+                Group Standings
+              </h2>
+              
+              <div class="filter-groups-btn-group" id="groups-filter-container">
+                <button class="group-filter-btn active" data-group="all">All</button>
+                <button class="group-filter-btn" data-group="A">A</button>
+                <button class="group-filter-btn" data-group="B">B</button>
+                <button class="group-filter-btn" data-group="C">C</button>
+                <button class="group-filter-btn" data-group="D">D</button>
+                <button class="group-filter-btn" data-group="E">E</button>
+                <button class="group-filter-btn" data-group="F">F</button>
+                <button class="group-filter-btn" data-group="G">G</button>
+                <button class="group-filter-btn" data-group="H">H</button>
+                <button class="group-filter-btn" data-group="I">I</button>
+                <button class="group-filter-btn" data-group="J">J</button>
+                <button class="group-filter-btn" data-group="K">K</button>
+                <button class="group-filter-btn" data-group="L">L</button>
+              </div>
+            </div>
+
+            <!-- Groups Cards Grid -->
+            <div class="groups-grid" id="groups-cards-grid">
+              <!-- Dynamically populated in app.js -->
+            </div>
+          </div>
+
+          <!-- Right: Sidebar Widget Upcoming Matches -->
+          <div class="sidebar-widgets">
+            <div class="widget-card">
+              <h3 class="widget-title">
+                <span>Upcoming Matches</span>
+                <i class="fa-solid fa-clock"></i>
+              </h3>
+              <div class="widget-list" id="upcoming-matches-widget-list">
+                <!-- Dynamically populated in app.js -->
+              </div>
+            </div>
+            
+            <div class="widget-card">
+              <h3 class="widget-title">
+                <span>Recent Results</span>
+                <i class="fa-solid fa-square-poll-vertical"></i>
+              </h3>
+              <div class="widget-list" id="recent-results-widget-list">
+                <!-- Dynamically populated in app.js -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================= SECTION: FIXTURES ================= -->
+      <section class="dashboard-section" id="section-fixtures">
+        <div class="fixtures-header">
+          <h2 class="host-section-title">
+            <i class="fa-solid fa-calendar-days"></i>
+            Match Schedule & Fixtures
+          </h2>
+          
+          <div class="fixtures-filter-tabs" id="fixtures-filter-tabs-container">
+            <button class="fixtures-filter-btn active" data-filter="all">All Matches</button>
+            <button class="fixtures-filter-btn" data-filter="upcoming">Upcoming</button>
+            <button class="fixtures-filter-btn" data-filter="completed">Completed</button>
+            <button class="fixtures-filter-btn" data-filter="knockout">Knockouts Only</button>
+          </div>
+        </div>
+
+        <div class="fixtures-grid" id="fixtures-cards-grid">
+          <!-- Dynamically populated in app.js -->
+        </div>
+      </section>
+
+      <!-- ================= SECTION: SQUADS ================= -->
+      <section class="dashboard-section" id="section-squads">
+        <div class="squads-header">
+          <div class="squads-control-group">
+            <span class="squad-team-label">Select National Team:</span>
+            <select class="squad-team-selector" id="squad-team-selector">
+              <!-- Dynamically populated in app.js -->
+            </select>
+          </div>
+          
+          <div class="squads-summary-stats">
+            <div class="squad-summary-item">
+              <span class="squad-summary-lbl">Team Rating</span>
+              <span class="squad-summary-val" id="squad-summary-rating">85</span>
+            </div>
+            <div class="squad-summary-item">
+              <span class="squad-summary-lbl">Goals Scored</span>
+              <span class="squad-summary-val" id="squad-summary-goals">0</span>
+            </div>
+            <div class="squad-summary-item">
+              <span class="squad-summary-lbl">Clean Sheets</span>
+              <span class="squad-summary-val" id="squad-summary-cleansheets">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="squad-table-container">
+          <table class="squad-table" id="squad-players-table">
+            <thead>
+              <tr>
+                <th data-sort="name">Player Name <i class="fa-solid fa-sort"></i></th>
+                <th data-sort="position">Position <i class="fa-solid fa-sort"></i></th>
+                <th data-sort="rating" class="rating-col">Overall Rating <i class="fa-solid fa-sort"></i></th>
+                <th data-sort="goals" class="num-col">Goals <i class="fa-solid fa-sort"></i></th>
+                <th data-sort="assists" class="num-col">Assists <i class="fa-solid fa-sort"></i></th>
+                <th data-sort="yellow" class="num-col">Yellows <i class="fa-solid fa-sort"></i></th>
+                <th data-sort="red" class="num-col">Reds <i class="fa-solid fa-sort"></i></th>
+              </tr>
+            </thead>
+            <tbody id="squad-players-tbody">
+              <!-- Dynamically populated in app.js -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= SECTION: LEADERS ================= -->
+      <section class="dashboard-section" id="section-leaders">
+        <h2 class="host-section-title">
+          <i class="fa-solid fa-award"></i>
+          Tournament Stats Leaderboards
+        </h2>
+        
+        <div class="leaderboards-grid">
+          
+          <!-- Golden Boot: Goals -->
+          <div class="leaderboard-column">
+            <h3 class="leaderboard-title">
+              <i class="fa-solid fa-shoe-prints"></i>
+              Golden Boot (Top Scorers)
+            </h3>
+            <div class="leader-list" id="leaderboard-goals">
+              <!-- Dynamically populated in app.js -->
+            </div>
+          </div>
+
+          <!-- Playmaker: Assists -->
+          <div class="leaderboard-column">
+            <h3 class="leaderboard-title">
+              <i class="fa-solid fa-hand-holding-hand"></i>
+              Playmaker Award (Top Assists)
+            </h3>
+            <div class="leader-list" id="leaderboard-assists">
+              <!-- Dynamically populated in app.js -->
+            </div>
+          </div>
+
+          <!-- Golden Glove: Clean Sheets -->
+          <div class="leaderboard-column">
+            <h3 class="leaderboard-title">
+              <i class="fa-solid fa-hands-bubbles"></i>
+              Golden Glove (Clean Sheets)
+            </h3>
+            <div class="leader-list" id="leaderboard-cleansheets">
+              <!-- Dynamically populated in app.js -->
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= SECTION: VENUES ================= -->
+      <section class="dashboard-section" id="section-venues">
+        <div class="venues-header-desc">
+          <h2 class="host-section-title">
+            <i class="fa-solid fa-map-location-dot"></i>
+            Host Cities & Venues
+          </h2>
+          <p>The 2026 World Cup will make history as it spans 16 cities across three host nations. Explore the stadiums below, themed to reflect the colors of the United States (navy/crimson), Canada (red/white), and Mexico (green/red).</p>
+        </div>
+
+        <div class="venues-grid" id="venues-grid-container">
+          <!-- Dynamically populated in app.js -->
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ================= MATCH SIMULATION MODAL ================= -->
+    <div class="modal-overlay" id="simulation-modal">
+      <div class="modal-card">
+        
+        <div class="modal-header">
+          <h3 class="modal-title">
+            <i class="fa-solid fa-circle-nodes"></i>
+            <span>Live Match Simulation</span>
+          </h3>
+          <button class="modal-close-btn" id="modal-close-btn">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Live Match Scoreboard -->
+          <div class="modal-match-board">
+            <div class="modal-teams-display">
+              <!-- Team Home -->
+              <div class="modal-team-block">
+                <span class="modal-team-flag" id="modal-team-home-flag">🇺🇸</span>
+                <span class="modal-team-name" id="modal-team-home-name">United States</span>
+                <span class="modal-team-rating" id="modal-team-home-rating">OVR 84</span>
+              </div>
+              
+              <!-- Score / Time -->
+              <div class="modal-score-block">
+                <span class="modal-score-digits" id="modal-score-digits">0 - 0</span>
+                <span class="modal-timer-badge" id="modal-timer-badge">0'</span>
+              </div>
+
+              <!-- Team Away -->
+              <div class="modal-team-block">
+                <span class="modal-team-flag" id="modal-team-away-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
+                <span class="modal-team-name" id="modal-team-away-name">England</span>
+                <span class="modal-team-rating" id="modal-team-away-rating">OVR 86</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Timeline Log -->
+          <div class="modal-events-container">
+            <h4 class="modal-section-title">Timeline of Events</h4>
+            <div class="modal-events-list" id="modal-events-ticker">
+              <div class="timeline-event-item" style="color: var(--text-muted);">
+                <span class="timeline-minute">0'</span>
+                <span class="timeline-icon"><i class="fa-solid fa-whistle"></i></span>
+                <span class="timeline-desc">The referee blows the whistle. Kick-off!</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Group Standing Real-time Shifts -->
+          <div class="modal-standings-updates" id="modal-standings-updates-block">
+            <h4 class="modal-section-title" id="modal-standings-updates-title">Group A Standings Effect</h4>
+            <table class="modal-standings-table">
+              <thead>
+                <tr>
+                  <th style="width: 40px;">Pos</th>
+                  <th>Team</th>
+                  <th class="center-col" style="width: 50px;">Pld</th>
+                  <th class="center-col" style="width: 50px;">GD</th>
+                  <th class="center-col" style="width: 50px;">Pts</th>
+                </tr>
+              </thead>
+              <tbody id="modal-standings-tbody">
+                <!-- Live Group Shifts -->
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button class="modal-action-btn" id="modal-action-btn">Done</button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- JavaScript file -->
+  <script src="app.js"></script>
+</body>
+</html>
